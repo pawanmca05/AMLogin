@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<h2>Login</h2>
+Email:<input type="text" id="txtEmail"  style="width:150px;"/><br/><br/>
+Pass:<input type="password" id="txtPass" style="width:150px;" /><br/>
+<input type="submit" value="Login" id="btnLogin" />
+
+<script>
+    $(document).ready(function () {
+        $('#btnLogin').click(function () {
+
+            user = $('#txtEmail').val();
+            pass = $('#txtPass').val();
+           // alert(user + " " + pass);
+            $.ajax({
+                type: "POST",
+                url: '/ProofHQ/Validate',
+                contentType: "application/json; charset=utf-8",
+                data: '{user: "' + $('#txtEmail').val() + '",pass:"'+$('#txtPass').val()+'" }',
+                dataType: "json",
+                success: function () {
+                    window.location.href = 'ProofHQ/Index';
+                },
+                error: function () { alert('error'); }
+            });
+
+        });
+
+    });
+</script>
