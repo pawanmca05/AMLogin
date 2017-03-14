@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProofHQPOC.com.proofhq.soap;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -27,7 +28,21 @@ namespace ProofHQPOC.Controllers
         public JsonResult GetComments(string Id,int fileId)
         {
             var comments = client.getProofComments(Id, fileId);
+           // comments[0].replies[0].
             return Json(comments,JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetProofDoc(string Id,int fileId)
+        {
+            string result = client.getProofDownloadURL(Id,fileId);
+            return Json(result,JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddComments(string Id, int fileId,int RevId,int commentId,string comment)
+        {
+
+            SOAPCommentReplyObject repl= client.addCommentReply(Id, fileId, RevId, commentId, comment);
+            return Json("success",JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetAllProofs(string Id)

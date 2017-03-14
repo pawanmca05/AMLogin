@@ -35,6 +35,19 @@
         color:red;
     }
 
+    ol{
+        text-decoration:none;
+        list-style-type: none;
+    }
+
+    .comment{
+        margin-left:200px;
+         width:100px;
+         height:20px;
+         border:1px solid green;
+         color:orange;
+    }
+
 </style>
 
 <div class="maindiv">
@@ -46,15 +59,19 @@
     </div>
     <div class="middlediv">
         <ol id="comflist"></ol>
+        <input type="text" id="txtComment" style="width:150px" /><br/><br/>
+        <button id="send">Send</button>
     </div>
     <div class="rightdiv">
         <p>Decision Status:<span class="error" id="idStatus"></span></p>
         <p>Proof Status:<span class="error" id="proofStatus"></span></p>
+        <button id="getFile">GetProofDocument</button>
     </div>
 </div>
 
 <script>
     var whole ='';
+
 
    
     $(document).ready(function () {
@@ -70,7 +87,8 @@
                 for(i=0;i<data.length;i++)
                 {
                     $('#prooflist').append('<li><a href="#" onclick=send('+data[i].file_id+');>' + data[i].filename + '</a></li>');
-                   // alert(data[i].filename);
+                    
+
                 }
             },
             error: function () {
@@ -84,6 +102,9 @@
 </script>
 
 <script>
+    var reviewer_Id = 0;
+    var fileId = 0;
+    var commnetId = 0;
     function send(id)
     {
 
@@ -96,7 +117,7 @@
             }
         }
 
-        var fileId = id;
+         fileId = id;
         $.ajax({
             type: "GET",
             url: '/ProofHQ/GetComments?Id=@ViewBag.Id &&fileId=' + id,
@@ -106,8 +127,20 @@
             success: function (data) {
                 $('#comflist').html('');
                 for (i = 0; i < data.length; i++) {
-                    $('#comflist').append('<li>' + data[i].comment + '</li>');
-                    // alert(data[i].filename);
+                    reviewer_Id = data[i].reviewer_id;
+                    commnetId = data[i].id;
+                    $('#comflist').append('<li>' + data[i].comment + '</li><br/><div class="comment">' + data[i].author + '</div>');
+                    for(j=0;j<data[i].replies_count;j++)
+                    {
+                        $('#comflist').append('<li>' + data[i].replies[j].comment + '</li><br/><div class="comment">' + data[i].replies[j].author + '</div>');
+
+                        if(data[i].author=='Pawan Tiwari')
+                        {
+                            reviewer_Id = data[i].replies[j].reviewer_id;
+
+                        }
+                        commnetId = data[i].id;
+                    }
                 }
             },
             error: function () {
@@ -116,6 +149,54 @@
             }
         });
     }
+
+    $(document).ready(function () {
+
+        $('#send').click(function () {
+            com = $('#txtComment').val();
+
+            $.ajax({
+                type: "GET",
+                url: '/ProofHQ/AddComments?Id=@ViewBag.Id &&fileId=' + fileId + '&&RevId=' + reviewer_Id + '&&commentId=' + commnetId + '&&comment=' + com,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $('#txtComment').val('');
+                    send(fileId)
+
+                },
+                error: function () {
+
+                    alert('error');
+                }
+            });
+
+        });
+
+        $('#getFile').click(function () {
+
+            $.ajax({
+                type: "GET",
+                url: '/ProofHQ/GetProofDoc?Id=@ViewBag.Id &&fileId=' + fileId,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    //$('#txtComment').val('');
+                    //send(fileId)
+                    // alert(data);
+                    location.href = data;
+
+                },
+                error: function () {
+
+                    alert('error');
+                }
+            });
+
+        })
+
+    });
+
 
 </script>
 
