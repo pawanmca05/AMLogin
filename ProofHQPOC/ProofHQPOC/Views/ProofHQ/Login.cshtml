@@ -14,6 +14,8 @@ Pass:<input type="password" id="txtPass" style="width:150px;" /><br/>
 
             user = $('#txtEmail').val();
             pass = $('#txtPass').val();
+
+
            // alert(user + " " + pass);
             $.ajax({
                 type: "POST",
@@ -21,10 +23,16 @@ Pass:<input type="password" id="txtPass" style="width:150px;" /><br/>
                 contentType: "application/json; charset=utf-8",
                 data: '{user: "' + $('#txtEmail').val() + '",pass:"'+$('#txtPass').val()+'" }',
                 dataType: "json",
-                success: function () {
-                    window.location.href = 'ProofHQ/Index';
+                success: function (data) {
+                    user = $('#txtEmail').val('');
+                    pass = $('#txtPass').val('');
+                    window.location.href = '/ProofHQ/Index?Id='+data
                 },
-                error: function () { alert('error'); }
+                error: function () {
+                    user = $('#txtEmail').val('');
+                    pass = $('#txtPass').val('');
+                    alert('error');
+                }
             });
 
         });
