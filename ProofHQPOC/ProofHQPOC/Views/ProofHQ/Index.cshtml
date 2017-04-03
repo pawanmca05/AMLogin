@@ -65,7 +65,10 @@
     <div class="rightdiv">
         <p>Decision Status:<span class="error" id="idStatus"></span></p>
         <p>Proof Status:<span class="error" id="proofStatus"></span></p>
+        <p>Proof Version:<span class="error" id="proofVersion"></span></p>
         <button id="getFile">GetProofDocument</button>
+        <p style="color:green;font:15px"><b>Users</b></p>
+        <ol id="Userslist"></ol>
     </div>
 </div>
 
@@ -114,10 +117,32 @@
             {
                 $('#idStatus').text(whole[i].decision);
                 $('#proofStatus').text(whole[i].status);
+                $('#proofVersion').text(whole[i].version);
             }
         }
+        fileId = id;
+        //Getting the List of users
+        $.ajax({
+            type: "GET",
+            url: '/ProofHQ/GetUsers?Id=@ViewBag.Id&&fileId=' + fileId,
+            contentType: "application/json; charset=utf-8",
+            //data: '{user: "' + $('#txtEmail').val() + '",pass:"'+$('#txtPass').val()+'" }',
+            dataType: "json",
+            success: function (data) {
+                // whole = data;
+                $("#Userslist").html('');
+                for (i = 0; i < data.length; i++) {
+                    $('#Userslist').append('<li>' + data[i].name + '</li>');
+                }
+            },
+            error: function () {
 
-         fileId = id;
+                alert('error');
+            }
+        });
+
+
+         
         $.ajax({
             type: "GET",
             url: '/ProofHQ/GetComments?Id=@ViewBag.Id &&fileId=' + id,

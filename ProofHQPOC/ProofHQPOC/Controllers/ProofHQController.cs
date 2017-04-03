@@ -25,6 +25,11 @@ namespace ProofHQPOC.Controllers
             return View();
         }
 
+        public ActionResult CreateProof()
+        {
+            return View();
+        }
+
         public JsonResult GetComments(string Id,int fileId)
         {
             var comments = client.getProofComments(Id, fileId);
@@ -50,6 +55,15 @@ namespace ProofHQPOC.Controllers
             allProofs = client.getAllProofs(Id, 0, "", 10);
             return Json(allProofs,JsonRequestBehavior.AllowGet);
         }
+
+        //Getting the List of Reviewers
+        public JsonResult GetUsers(string Id,string fileId)
+        {
+            var users = client.getProofReviewers(Id, fileId);
+            return Json(users, JsonRequestBehavior.AllowGet);
+        }
+
+
         public JsonResult Validate(string user,string pass)
         {
             
