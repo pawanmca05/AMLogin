@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -130,6 +131,7 @@
     <Content Include="Views\ProofHQ\Login.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\ProofHQ\Index.cshtml" />
+    <Content Include="Views\ProofHQ\CreateProoff.cshtml" />
     <None Include="Web References\com.proofhq.soap\soap.wsdl" />
     <Content Include="Web References\com.proofhq.soap\SOAPAccountObject.datasource">
       <DependentUpon>Reference.map</DependentUpon>

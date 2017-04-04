@@ -25,10 +25,16 @@ namespace ProofHQPOC.Controllers
             return View();
         }
 
-        public ActionResult CreateProof(string id)
+        public ActionResult CreateProoff(string id)
         {
             ViewBag.id = id;
             return View();
+        }
+
+        public JsonResult GeenerateProof(string Id,string filename,string hash,string proofname)
+        {
+           var result=client.createProof(Id,0,hash,proofname,filename,"","","","",0,0,true,true,"","",true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,"","",true,"",true);
+            return Json("success");
         }
 
         public JsonResult GetComments(string Id,int fileId)

@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "CreateProoff";
+}
+
+<h2>CreateProoff</h2>
+
+Select file:<input type="FILE"  onchange="GetHash()" id="pfFile" name="optionalFile" /><br/><br/>
+Prrof Name:<input type="text" id="txtProofName" /><br/><br/>
+<input type="button" value="Create Proof" id="createProof" />
+
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    var hash;
+    var fileName;
+    function GetHash()
+    {
+        var file = document.getElementById("pfFile");
+        fileName = $('#pfFile').val().split('\\').pop();;
+        alert(fileName);
+        var fildata = file.files[0];
+        var formData = new FormData();
+        formData.append('optionalFile', fildata);
+
+        $.ajax({
+
+            url: 'https://soap.proofhq.com/upload.php',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            
+            data: formData,
+            success:function(data)
+            {
+                hash = $(data.firstElementChild.firstChild).find('filehash').text();
+               
+                alert(hash);
+            },
+            error:function(data)
+            {
+                alert(data)
+            }
+        });
+    }
+</script>
+<script>
+    $(document).ready(function () { 
+    //function for creating a proof
+        $('#createProof').click(function () { 
+            var proofname = $('#txtProofName').val();
+        $.ajax({
+
+            url: '/ProofHQ/GeenerateProof',
+            type: 'POST',
+            async:false,
+            contentType: 'application/json',
+            data: '{"Id":"@ViewBag.Id","fileName":"' + fileName + '","hash":"' + hash + '","ProofName":"' + proofname + '"}',
+            success: function (data) {
+                
+
+                alert('proofcreated successfully!!');
+            },
+            error: function (data) {
+                alert(data)
+            }
+        });
+        });
+    });
+</script>
