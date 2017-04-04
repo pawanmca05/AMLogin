@@ -25,8 +25,9 @@ namespace ProofHQPOC.Controllers
             return View();
         }
 
-        public ActionResult CreateProof()
+        public ActionResult CreateProof(string id)
         {
+            ViewBag.id = id;
             return View();
         }
 
